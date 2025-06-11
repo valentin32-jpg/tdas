@@ -1,12 +1,16 @@
 package ar.edu.uns.cs.ed.tdas.tdaarbol;
 
 
+import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Map;
 
 import ar.edu.uns.cs.ed.tdas.excepciones.*;
 import ar.edu.uns.cs.ed.tdas.Position;
-import ar.edu.uns.cs.ed.tdas.tdalista.ListaDoblementeEnlazada;
+import ar.edu.uns.cs.ed.tdas.tdalista.ListaDE;
 import ar.edu.uns.cs.ed.tdas.tdalista.PositionList;
+import ar.edu.uns.cs.ed.tdas.tdamapeo.HashTableMap;
 
 public class Arbol<E> implements Tree<E>{
 	
@@ -30,7 +34,7 @@ public class Arbol<E> implements Tree<E>{
 
 	@Override
 	public Iterator<E> iterator() {
-		PositionList<E> resultado = new ListaDoblementeEnlazada<E>();
+		PositionList<E> resultado = new ListaDE<E>();
 		
 		preordenElementos(root, resultado);
 		
@@ -39,7 +43,7 @@ public class Arbol<E> implements Tree<E>{
 
 	@Override
 	public Iterable<Position<E>> positions() {
-		PositionList<E> resultado = new ListaDoblementeEnlazada<E>();
+		PositionList<E> resultado = new ListaDE<E>();
 		
 		preordenElementos(root, resultado);
 		
@@ -89,10 +93,10 @@ public class Arbol<E> implements Tree<E>{
 	@Override
 	public Iterable<Position<E>> children(Position<E> v) {
 		TNodo<E> nodo = checkPosition(v);
-		PositionList<Position<E>> resultado = new ListaDoblementeEnlazada<Position<E>>();
+		PositionList<Position<E>> resultado = new ListaDE<Position<E>>();
 		
 		for(TNodo<E> puntero : nodo.hijos) {
-			resultado.addLast(nodo);
+			resultado.addLast(puntero);
 		}
 		
 		return resultado;
@@ -277,4 +281,87 @@ public class Arbol<E> implements Tree<E>{
 	}
 	
 
+	public void eliminarUltimoHijo(Position<E> p) {
+    TNodo<E> padre = checkPosition(p);
+	PositionList<TNodo<E>> children = padre.Hijos();
+
+
+    if (isRoot(p)) {
+        throw new InvalidOperationException("No se pueda realizar la siguiente operacion a la raiz");
+    }
+
+	TNodo<E> ultimo = null;
+
+    for (TNodo<E> h : children) {
+        ultimo = h;
+    }
+
+	if (padre != ultimo) {
+        throw new InvalidOperationException("El nodo no es el último hijo de su padre.");
+    }
+        removeNode(padre);
 }
+
+
+	public Map<Character, Integer> cantidadRepeticiones(Tree<Character> t) {
+		Map<Character, Integer> NuevoMapeo = new HashMap<>();
+		
+		for (Position<Character> pos : t.positions()) {
+            char c = pos.element();
+            NuevoMapeo.put(c, NuevoMapeo.getOrDefault(c, 0) + 1);
+        }
+
+        return NuevoMapeo;
+	}
+
+
+	public Iterable<Position<String>> posicionesConValor(Tree<String> a, String s) {
+        PositionList<Position<String>> resultado = new ListaDE<>();
+        if (!a.isEmpty()) {
+            recorrerPostorden(a, a.root(), s, resultado);
+        }
+        return resultado;
+    }
+
+    private void recorrerPostorden(Tree<String> a, Position<String> p, String s, PositionList<Position<String>> res) {
+        for (Position<String> hijo : a.children(p)) {
+            recorrerPostorden(a, hijo, s, res);
+        }
+
+        if (p.element().equals(s)) {
+            res.addLast(p);
+        }
+    }
+
+	public int EliminarApariciones(Tree<E> a, E elemento) {
+	int contador = 0;
+    
+	PositionList<Position<E>> paraEliminar = new ListaDE<>();
+
+    for (Position<E> p : a.positions()) {
+        if (p.element().equals(elemento)) {
+            paraEliminar.addLast(p);
+        }
+    }
+
+	for (Position<E> p : paraEliminar) {
+    	a.removeNode(p);
+    	contador++;
+	}
+
+	return contador;
+	}
+
+	public boolean pertenece(Tree<E> a, int n) {
+		boolean resultado = false;
+		
+		for (E e : a) {  
+        if (e.equals(n)) {
+			resultado = true;
+        }
+    }
+    return resultado;
+
+	}
+}
+

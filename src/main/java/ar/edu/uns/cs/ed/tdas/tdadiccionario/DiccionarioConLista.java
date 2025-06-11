@@ -5,17 +5,17 @@ import java.util.Iterator;
 import ar.edu.uns.cs.ed.tdas.excepciones.*;
 import ar.edu.uns.cs.ed.tdas.Entry;
 import ar.edu.uns.cs.ed.tdas.Position;
-import ar.edu.uns.cs.ed.tdas.tdalista.ListaDoblementeEnlazada;
+import ar.edu.uns.cs.ed.tdas.tdalista.ListaDE;
 import ar.edu.uns.cs.ed.tdas.tdalista.PositionList;
 import ar.edu.uns.cs.ed.tdas.tdamapeo.Entrada;
 
 public class DiccionarioConLista<K,V> implements Dictionary<K,V>{
-	protected ListaDoblementeEnlazada<Entrada<K,V>> lista;
+	protected ListaDE<Entrada<K,V>> lista;
 	protected int cant;
 	protected int capacidad;
 	
 	public DiccionarioConLista () {
-			lista = new ListaDoblementeEnlazada<Entrada<K,V>>();
+			lista = new ListaDE<Entrada<K,V>>();
 		}
 	
 	@Override
@@ -49,7 +49,7 @@ public class DiccionarioConLista<K,V> implements Dictionary<K,V>{
 	}
 	@Override
 	public Iterable<Entry<K, V>> findAll(K key) {
-		PositionList<Entry<K, V>> listaDeUnSoloUso = new ListaDoblementeEnlazada<Entry<K,V>>();
+		PositionList<Entry<K, V>> listaDeUnSoloUso = new ListaDE<Entry<K,V>>();
 		Iterator<Entrada<K, V>> cursor = lista.iterator();
 		Entrada<K, V> retorna = null;
 		

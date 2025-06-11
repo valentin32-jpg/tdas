@@ -2,20 +2,21 @@ package ar.edu.uns.cs.ed.tdas.tdadiccionario;
 
 import ar.edu.uns.cs.ed.tdas.Entry;
 import ar.edu.uns.cs.ed.tdas.excepciones.InvalidKeyException;
-import ar.edu.uns.cs.ed.tdas.tdalista.ListaDoblementeEnlazada;
+import ar.edu.uns.cs.ed.tdas.tdalista.ListaDE;
 import ar.edu.uns.cs.ed.tdas.tdamapeo.Entrada;
 
 public class DictionaryConHash <K,V> implements Dictionary<K,V> {
 
-    protected ListaDoblementeEnlazada<Entrada<K,V>> []mapeo;
+    protected ListaDE<Entrada<K,V>> []mapeo;
     protected int cant;
 
+    @SuppressWarnings("unchecked")
     public DictionaryConHash(){
-        mapeo=(ListaDoblementeEnlazada<Entrada<K,V>>[]) new ListaDoblementeEnlazada[73];
+        mapeo = (ListaDE<Entrada<K,V>>[]) new ListaDE[73];
         for(int i=0; i<mapeo.length;i++){
-            mapeo[i]=new ListaDoblementeEnlazada<>();
+            mapeo[i]=new ListaDE<>();
         }
-        cant=0;
+        cant = 0;
     }
     public int hash(K key ){
         return key.hashCode() % 73;
@@ -28,15 +29,17 @@ public class DictionaryConHash <K,V> implements Dictionary<K,V> {
 
     @Override
     public boolean isEmpty() {
-        return cant==0;
+        return cant == 0;
     }
 
     @Override
     public Entry<K, V> find(K key) {
         if (key == null) 
             throw new InvalidKeyException("Clave inválida");
-        Entry<K,V> resultado=null;
+        Entry<K,V> resultado = null;
+        
         int index = hash(key);
+       
         for (Entry<K, V> entry : mapeo[index]) {
             if (entry.getKey()==(key)) {
                 resultado= entry;
