@@ -94,7 +94,7 @@ public class ListaDE<E> implements PositionList<E> {
     @Override
     public E remove(Position<E> p) {
         if (isEmpty())
-            throw new EmptyListException("Se intento remove en una lista vacia");
+            throw new InvalidPositionException("Se intento remove en una lista vacia");
         DNode<E> nodo = checkPosition(p);
         nodo.getAnterior().setSiguiente(nodo.getSiguiente());
         nodo.getSiguiente().setAnterior(nodo.getAnterior());
@@ -104,6 +104,8 @@ public class ListaDE<E> implements PositionList<E> {
 
     @Override
     public E set(Position<E> p, E element) {
+        if (isEmpty())
+            throw new InvalidPositionException("Se intento remove en una lista vacia");
         DNode<E> nodo = checkPosition(p);
         E viejo= nodo.element();
         nodo.setElemento(element);

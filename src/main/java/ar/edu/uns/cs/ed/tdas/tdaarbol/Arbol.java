@@ -36,7 +36,8 @@ public class Arbol<E> implements Tree<E>{
 	public Iterator<E> iterator() {
 		PositionList<E> resultado = new ListaDE<E>();
 		
-		preordenElementos(root, resultado);
+		if(!isEmpty())
+			preordenElementos(root, resultado);
 		
 		return resultado.iterator();
 	}
@@ -45,7 +46,8 @@ public class Arbol<E> implements Tree<E>{
 	public Iterable<Position<E>> positions() {
 		PositionList<E> resultado = new ListaDE<E>();
 		
-		preordenElementos(root, resultado);
+		if(!isEmpty())
+			preordenElementos(root, resultado);
 		
 		return resultado.positions();
 	}
@@ -85,8 +87,10 @@ public class Arbol<E> implements Tree<E>{
 
 	@Override
 	public Position<E> parent(Position<E> v) {
-		TNodo<E> nodo = checkPosition(v);
 	
+		TNodo<E> nodo = checkPosition(v);
+		
+		if(isRoot(v)) {throw new BoundaryViolationException("null");}
 		return nodo.padre;
 	}
 
@@ -135,7 +139,8 @@ public class Arbol<E> implements Tree<E>{
 		TNodo<E> nodo = checkPosition(p);
 		TNodo<E> hijo = new TNodo<E>(e, nodo);
 		nodo.Hijos().addFirst(hijo);
-		
+		size++;
+
 		return hijo;
 	}
 
@@ -143,10 +148,10 @@ public class Arbol<E> implements Tree<E>{
 	public Position<E> addLastChild(Position<E> p, E e) {
 		TNodo<E> nodo = checkPosition(p);
 		TNodo<E> hijo = new TNodo<E>(e, nodo);
-		
 		nodo.Hijos().addLast(hijo);
+		size++;
 		
-		return null;
+		return hijo;
 	}
 
 	@Override
@@ -211,8 +216,7 @@ public class Arbol<E> implements Tree<E>{
 		if(root == nodo) {
 			root = null;
 			size = 0;
-			} 
-		
+		} else {
 			Iterator<Position<TNodo<E>>> ite = nodo.getPadre().Hijos().positions().iterator();
 			Position<TNodo<E>> posBuscada = null;
 			
@@ -225,6 +229,7 @@ public class Arbol<E> implements Tree<E>{
 			
 			nodo.getPadre().Hijos().remove(posBuscada);
 			size--;
+		}
 	}
 
 	@Override
@@ -241,7 +246,7 @@ public class Arbol<E> implements Tree<E>{
 			root = root.Hijos().first().element();
 			root.setPadre(null);
 			size--;
-			} 
+		} else {
 		
 			Iterator<Position<TNodo<E>>> ite = nodo.getPadre().Hijos().positions().iterator();
 			Position<TNodo<E>> posBuscada = null;
@@ -261,7 +266,7 @@ public class Arbol<E> implements Tree<E>{
 			nodo.getPadre().Hijos().remove(posBuscada);
 			nodo.setPadre(null);
 			size--;
-		
+		}
 	}
 
 	@Override

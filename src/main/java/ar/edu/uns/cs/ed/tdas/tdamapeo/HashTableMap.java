@@ -50,28 +50,28 @@ public class HashTableMap<K, V> implements Map<K, V> {
 		 return toReturn;
 	}
 	public V put(K key, V value) {
+		checkKey(key);
 		V toReturn = null;
 		Entrada<K, V> toInsert = new Entrada<K, V>(key, value);
 		ListaDE<Entrada<K,V>>lista = array[h(key)];
-			checkKey(key);
-			
-			DNode<Entrada<K,V>> cursor = (DNode<Entrada<K,V>>) lista.first();
-			
-			 for(int i = 0; i < lista.size() && toReturn == null; i++) {
-				 if(cursor.element().getKey().equals(key)) { 
-					 toReturn = cursor.element().getValue(); 
-					 cursor.element().setValue(value);
-				 }
-				 	else cursor = cursor.getSiguiente();		 
-			 } 
-			 
-			if(toReturn == null) {
-				lista.addLast(toInsert);
-				cant++;
+		
+		DNode<Entrada<K,V>> cursor = (DNode<Entrada<K,V>>) lista.first();
+		
+		for(int i = 0; i < lista.size() && toReturn == null; i++) {
+			if(cursor.element().getKey().equals(key)) { 
+				toReturn = cursor.element().getValue(); 
+				cursor.element().setValue(value);
 			}
+			else cursor = cursor.getSiguiente();		 
+		} 
 			
-			 return toReturn;
+		if(toReturn == null) {
+			lista.addLast(toInsert);
+			cant++;
 		}
+		
+			return toReturn;
+	}
 
 		@Override
 		public V remove(K key) {
@@ -131,7 +131,7 @@ public class HashTableMap<K, V> implements Map<K, V> {
 		}
 		 
 		protected void checkKey(K key) {
-			if (key != null) {
+			if (key == null) {
 				throw new InvalidKeyException("llave invalida");
 			};
 		}
