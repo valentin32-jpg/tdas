@@ -46,8 +46,7 @@ public class ArbolBinario<E> implements BinaryTree<E>{
 	}
 
     public Iterator<E> iterator() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'iterator'");
+            return null;
     }
 
     @Override
@@ -72,10 +71,10 @@ public class ArbolBinario<E> implements BinaryTree<E>{
             throw new EmptyTreeException( "El esta vacio fijate que estas haciendo");
         return this.raiz;
     }
-
+//NO es necesario implementar los metdos de aca al siguiente comentario
     @Override
     public Position<E> parent(Position<E> v) {
-
+        throw new UnsupportedOperationException("Unimplemented method 'children'");
     }
 
     @Override
@@ -159,7 +158,7 @@ public class ArbolBinario<E> implements BinaryTree<E>{
         }
         return v;
     }
-
+//Hasta aca no es necesario son triviales
     @Override
     public Position<E> right(Position<E> v) {
         BTNodo<E> n = checkPosition(v);

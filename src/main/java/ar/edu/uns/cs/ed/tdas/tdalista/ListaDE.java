@@ -35,7 +35,7 @@ public class ListaDE<E> implements PositionList<E> {
 
     @Override
     public Position<E> first() {
-        if (isEmpty())
+        if (!isEmpty())
             throw new EmptyListException("Se intento hacer first en una lista vacia");
         return primero.getSiguiente();
     }
