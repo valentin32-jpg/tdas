@@ -13,8 +13,8 @@ public class DictionaryConHash <K,V> implements Dictionary<K,V> {
     @SuppressWarnings("unchecked")
     public DictionaryConHash(){
         mapeo = (ListaDE<Entrada<K,V>>[]) new ListaDE[73];
-        for(int i=0; i<mapeo.length;i++){
-            mapeo[i]=new ListaDE<>();
+        for(int i = 0; i < mapeo.length;i++){
+            mapeo[i] = new ListaDE<>();
         }
         cant = 0;
     }
@@ -36,6 +36,7 @@ public class DictionaryConHash <K,V> implements Dictionary<K,V> {
     public Entry<K, V> find(K key) {
         if (key == null) 
             throw new InvalidKeyException("Clave inválida");
+        
         Entry<K,V> resultado = null;
         
         int index = hash(key);
@@ -50,8 +51,19 @@ public class DictionaryConHash <K,V> implements Dictionary<K,V> {
 
     @Override
     public Iterable<Entry<K, V>> findAll(K key) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findAll'");
+         if (key == null) 
+            throw new InvalidKeyException("Clave inválida");
+        
+        Entry<K,V> resultado = null;
+        
+        int index = hash(key);
+       
+        for (Entry<K, V> entry : mapeo[index]) {
+            if (entry.getKey() == (key)) {
+                resultado = entry;
+            }
+        }
+        return resultado;
     }
 
     @Override

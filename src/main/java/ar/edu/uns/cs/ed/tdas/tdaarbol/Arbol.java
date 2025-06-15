@@ -2,7 +2,6 @@ package ar.edu.uns.cs.ed.tdas.tdaarbol;
 
 
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -10,7 +9,6 @@ import ar.edu.uns.cs.ed.tdas.excepciones.*;
 import ar.edu.uns.cs.ed.tdas.Position;
 import ar.edu.uns.cs.ed.tdas.tdalista.ListaDE;
 import ar.edu.uns.cs.ed.tdas.tdalista.PositionList;
-import ar.edu.uns.cs.ed.tdas.tdamapeo.HashTableMap;
 
 public class Arbol<E> implements Tree<E>{
 	
@@ -233,41 +231,38 @@ public class Arbol<E> implements Tree<E>{
 	}
 
 	@Override
-	public void removeInternalNode(Position<E> p) {
-		TNodo<E> nodo = checkPosition(p);		
-		
-		if(isExternal(nodo)) 
-			throw new InvalidPositionException("El nodo no es externo");
-		
-		if(root == nodo) {
-			if(root.Hijos().size() > 1)
-				throw new InvalidPositionException("No puedo eliminar la raiz porque tiene muchos hijos");
-			
-			root = root.Hijos().first().element();
-			root.setPadre(null);
-			size--;
-		} else {
-		
-			Iterator<Position<TNodo<E>>> ite = nodo.getPadre().Hijos().positions().iterator();
-			Position<TNodo<E>> posBuscada = null;
-			
-			while(ite.hasNext() && posBuscada == null) {
-				Position<TNodo<E>> pos = ite.next();
-				
-				if(pos.element() == nodo ) 
-					posBuscada = pos;
-			}
-			
-			for(TNodo<E> hijo : nodo.Hijos()) {
-				nodo.getPadre().Hijos().addBefore(posBuscada, hijo);
-				hijo.setPadre(nodo.getPadre());
-			}
-			
+	 public void removeInternalNode(Position<E> p) {
+        TNodo<E> nodo = checkPosition(p);
+
+        if(isExternal(nodo)){
+            throw new InvalidPositionException("No es un nodo Interno");
+        }
+        
+		if(nodo == root){
+            if(nodo.getPadre().Hijos().size() > 1){
+                throw new InvalidPositionException("No puedo eliminar la raiz porque tiene muchos hijos");
+            }
+        } else {
+            Iterator<Position<TNodo<E>>> ite= nodo.getPadre().Hijos().positions().iterator();
+            Position<TNodo<E>> posBuscada= null;
+            
+			while (ite.hasNext()&& posBuscada==null){
+                Position<TNodo<E>> n= ite.next();
+                if(n.element()==nodo){
+                    posBuscada=n;
+                }
+            }
+            
+			for(TNodo<E> hijo : nodo.Hijos() ){
+                nodo.getPadre().Hijos().addBefore(posBuscada,hijo);
+                hijo.setPadre(nodo.getPadre());
+            }
+            
 			nodo.getPadre().Hijos().remove(posBuscada);
 			nodo.setPadre(null);
 			size--;
-		}
-	}
+        }
+    }
 
 	@Override
 	public void removeNode(Position<E> p) {
