@@ -233,16 +233,19 @@ public class Arbol<E> implements Tree<E>{
 	@Override
 	 public void removeInternalNode(Position<E> p) {
         TNodo<E> nodo = checkPosition(p);
-
-        if(isExternal(nodo)){
-            throw new InvalidPositionException("No es un nodo Interno");
-        }
         
 		if(nodo == root){
             if(nodo.getPadre().Hijos().size() > 1){
                 throw new InvalidPositionException("No puedo eliminar la raiz porque tiene muchos hijos");
-            }
-        } else {
+            } else {
+				TNodo<E> unicoHijo = nodo.Hijos().first().element();
+            	
+				unicoHijo.setPadre(null);
+           		root = unicoHijo;
+           		size--; 
+            	return;
+			}
+        } 
             Iterator<Position<TNodo<E>>> ite= nodo.getPadre().Hijos().positions().iterator();
             Position<TNodo<E>> posBuscada= null;
             
@@ -262,7 +265,6 @@ public class Arbol<E> implements Tree<E>{
 			nodo.setPadre(null);
 			size--;
         }
-    }
 
 	@Override
 	public void removeNode(Position<E> p) {
