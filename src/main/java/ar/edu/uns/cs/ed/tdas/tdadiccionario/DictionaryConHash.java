@@ -49,6 +49,7 @@ public class DictionaryConHash <K,V> implements Dictionary<K,V> {
         return resultado;
     }
 
+    @SuppressWarnings("unused")
     @Override
     public Iterable<Entry<K, V>> findAll(K key) {
          if (key == null) 
@@ -63,7 +64,7 @@ public class DictionaryConHash <K,V> implements Dictionary<K,V> {
                 resultado = entry;
             }
         }
-        return resultado;
+        return null;
     }
 
     @Override
